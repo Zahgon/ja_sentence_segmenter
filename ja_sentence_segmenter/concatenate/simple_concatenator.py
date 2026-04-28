@@ -6,30 +6,7 @@ from typing import Generator, Iterator, List, Optional, Union, overload
 def __concatenate_matching_iter(
     texts: Iterator[str], former_matching_rule: Optional[str], latter_matching_rule: Optional[str], remove_former_matched: bool, remove_latter_matched: bool
 ) -> Generator[str, None, None]:
-    try:
-        former = next(texts)
-
-        for latter in texts:
-            former_match_obj = re.match(former_matching_rule, former) if former_matching_rule else None
-            latter_match_obj = re.match(latter_matching_rule, latter) if latter_matching_rule else None
-
-            if former_matching_rule and latter_matching_rule and former_match_obj and latter_match_obj:
-                tmp_former = former_match_obj.group("result") if remove_former_matched else former
-                tmp_latter = latter_match_obj.group("result") if remove_latter_matched else latter
-                former = tmp_former + tmp_latter
-            elif former_matching_rule and not latter_matching_rule and former_match_obj:
-                tmp_former = former_match_obj.group("result") if remove_former_matched else former
-                former = tmp_former + latter
-            elif not former_matching_rule and latter_matching_rule and latter_match_obj:
-                tmp_latter = latter_match_obj.group("result") if remove_latter_matched else latter
-                former += tmp_latter
-            else:
-                yield former
-                former = latter
-
-        yield former
-    except StopIteration:
-        pass
+    pass
 
 
 @overload
@@ -87,7 +64,4 @@ def concatenate_matching(
     Generator[str, None, None]
         concatenated texts.
     """
-    if isinstance(arg, list):
-        yield from __concatenate_matching_iter(iter(arg), former_matching_rule, latter_matching_rule, remove_former_matched, remove_latter_matched)
-    elif isinstance(arg, Iterator):
-        yield from __concatenate_matching_iter(arg, former_matching_rule, latter_matching_rule, remove_former_matched, remove_latter_matched)
+    pass
